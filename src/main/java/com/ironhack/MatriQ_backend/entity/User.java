@@ -32,7 +32,7 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private UserRole role;
 
     @Column(name = "birth_date")
     private LocalDate birthDate;

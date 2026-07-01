@@ -1,6 +1,6 @@
 package com.ironhack.MatriQ_backend.entity;
 
-public enum Role {
+public enum UserRole {
     ADMIN,
     SUPPLIER,
     CUSTOMER
