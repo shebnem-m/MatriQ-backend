@@ -1,5 +1,5 @@
 package com.ironhack.MatriQ_backend.repository;
-import com.ironhack.MatriQ_backend.entity.Role;
+import com.ironhack.MatriQ_backend.entity.UserRole;
 import com.ironhack.MatriQ_backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,5 +11,5 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String email);
     boolean existsByEmail(String email);
-    List<User> findByRole(Role role);
+    List<User> findByRole(UserRole role);
 }
