@@ -2,9 +2,11 @@ package com.ironhack.MatriQ_backend.mapper;
 
 import com.ironhack.MatriQ_backend.dto.order.OrderResponse;
 import com.ironhack.MatriQ_backend.entity.Order;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OrderMapper {
-    public static OrderResponse toResponseDTO(Order order) {
+    public OrderResponse toResponseDTO(Order order) {
         OrderResponse response = new OrderResponse(
                 order.getId(),
                 order.getBuyer().getId(),
