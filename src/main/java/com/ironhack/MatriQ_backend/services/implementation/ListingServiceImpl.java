@@ -3,7 +3,7 @@ package com.ironhack.MatriQ_backend.services.implementation;
 import com.ironhack.MatriQ_backend.dto.listing.ListingCreateDto;
 import com.ironhack.MatriQ_backend.dto.listing.ListingFilterDto;
 import com.ironhack.MatriQ_backend.dto.listing.ListingResponseDto;
-import com.ironhack.MatriQ_backend.entities.Listing;
+import com.ironhack.MatriQ_backend.entity.Listing;
 import com.ironhack.MatriQ_backend.mappers.ListingMapper;
 import com.ironhack.MatriQ_backend.repositories.ListingRepository;
 import com.ironhack.MatriQ_backend.services.ListingService;

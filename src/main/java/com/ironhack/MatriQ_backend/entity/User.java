@@ -1,5 +1,6 @@
 package com.ironhack.MatriQ_backend.entity;
 
+import com.ironhack.MatriQ_backend.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

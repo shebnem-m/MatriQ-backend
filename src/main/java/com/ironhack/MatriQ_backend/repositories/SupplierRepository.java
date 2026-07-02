@@ -1,6 +1,6 @@
 package com.ironhack.MatriQ_backend.repositories;
 
-import com.ironhack.MatriQ_backend.entities.Supplier;
+import com.ironhack.MatriQ_backend.entity.Supplier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

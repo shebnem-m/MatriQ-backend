@@ -2,7 +2,7 @@ package com.ironhack.MatriQ_backend.mappers;
 
 import com.ironhack.MatriQ_backend.dto.listing.ListingCreateDto;
 import com.ironhack.MatriQ_backend.dto.listing.ListingResponseDto;
-import com.ironhack.MatriQ_backend.entities.Listing;
+import com.ironhack.MatriQ_backend.entity.Listing;
 import org.springframework.stereotype.Component;
 
 @Component

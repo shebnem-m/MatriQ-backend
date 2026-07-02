@@ -2,7 +2,7 @@ package com.ironhack.MatriQ_backend.mappers;
 
 import com.ironhack.MatriQ_backend.dto.supplier.SupplierCreateDTO;
 import com.ironhack.MatriQ_backend.dto.supplier.SupplierResponseDTO;
-import com.ironhack.MatriQ_backend.entities.Supplier;
+import com.ironhack.MatriQ_backend.entity.Supplier;
 import org.springframework.stereotype.Component;
 
 @Component

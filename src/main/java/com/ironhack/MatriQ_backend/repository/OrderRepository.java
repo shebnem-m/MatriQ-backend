@@ -2,7 +2,7 @@ package com.ironhack.MatriQ_backend.repository;
 
 
 import com.ironhack.MatriQ_backend.entity.Order;
-import com.ironhack.MatriQ_backend.entity.OrderStatus;
+import com.ironhack.MatriQ_backend.enums.OrderStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

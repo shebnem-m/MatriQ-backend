@@ -1,6 +1,6 @@
 package com.ironhack.MatriQ_backend.repositories;
 
-import com.ironhack.MatriQ_backend.entities.Review;
+import com.ironhack.MatriQ_backend.entity.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

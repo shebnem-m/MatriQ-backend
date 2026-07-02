@@ -2,7 +2,7 @@ package com.ironhack.MatriQ_backend.mappers;
 
 import com.ironhack.MatriQ_backend.dto.review.ReviewCreateDto;
 import com.ironhack.MatriQ_backend.dto.review.ReviewResponseDto;
-import com.ironhack.MatriQ_backend.entities.Review;
+import com.ironhack.MatriQ_backend.entity.Review;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
