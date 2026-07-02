@@ -14,7 +14,7 @@ public class OrderMapper {
                 order.getQuantity(),
                 order.getUnitPrice(),
                 order.getTotalPrice(),
-                order.getStatus().name(),
+                order.getStatus(),
                 order.getCreatedAt(),
                 order.getUpdatedAt()
                 );

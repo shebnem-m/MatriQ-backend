@@ -1,4 +1,4 @@
-package com.ironhack.MatriQ_backend.entity;
+package com.ironhack.MatriQ_backend.enums;
 
 public enum OrderStatus {
     PENDING,

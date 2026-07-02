@@ -1,6 +1,6 @@
 package com.ironhack.MatriQ_backend.dto.user;
 
-import com.ironhack.MatriQ_backend.entity.UserRole;
+import com.ironhack.MatriQ_backend.enums.UserRole;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 

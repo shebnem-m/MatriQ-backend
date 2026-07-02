@@ -1,5 +1,6 @@
 package com.ironhack.MatriQ_backend.entity;
 
+import com.ironhack.MatriQ_backend.enums.OrderStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
