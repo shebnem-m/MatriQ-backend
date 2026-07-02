@@ -1,8 +1,8 @@
-package com.ironhack.MatriQ_backend.controllers;
+package com.ironhack.MatriQ_backend.controller;
 
-import com.ironhack.MatriQ_backend.dtos.review.ReviewCreateDto;
-import com.ironhack.MatriQ_backend.dtos.review.ReviewResponseDto;
-import com.ironhack.MatriQ_backend.services.ReviewService;
+import com.ironhack.MatriQ_backend.dto.review.ReviewCreateDto;
+import com.ironhack.MatriQ_backend.dto.review.ReviewResponseDto;
+import com.ironhack.MatriQ_backend.service.ReviewService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

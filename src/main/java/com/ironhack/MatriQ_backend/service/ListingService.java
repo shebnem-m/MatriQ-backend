@@ -1,8 +1,8 @@
-package com.ironhack.MatriQ_backend.services;
+package com.ironhack.MatriQ_backend.service;
 
-import com.ironhack.MatriQ_backend.dtos.listing.ListingCreateDto;
-import com.ironhack.MatriQ_backend.dtos.listing.ListingFilterDto;
-import com.ironhack.MatriQ_backend.dtos.listing.ListingResponseDto;
+import com.ironhack.MatriQ_backend.dto.listing.ListingCreateDto;
+import com.ironhack.MatriQ_backend.dto.listing.ListingFilterDto;
+import com.ironhack.MatriQ_backend.dto.listing.ListingResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.UUID;

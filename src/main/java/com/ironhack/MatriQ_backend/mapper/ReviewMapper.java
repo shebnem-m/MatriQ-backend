@@ -1,7 +1,7 @@
 package com.ironhack.MatriQ_backend.mapper;
 
-import com.ironhack.MatriQ_backend.dtos.review.ReviewCreateDto;
-import com.ironhack.MatriQ_backend.dtos.review.ReviewResponseDto;
+import com.ironhack.MatriQ_backend.dto.review.ReviewCreateDto;
+import com.ironhack.MatriQ_backend.dto.review.ReviewResponseDto;
 import com.ironhack.MatriQ_backend.entity.Review;
 import org.springframework.stereotype.Component;
 

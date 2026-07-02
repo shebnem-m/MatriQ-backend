@@ -1,7 +1,7 @@
-package com.ironhack.MatriQ_backend.services;
+package com.ironhack.MatriQ_backend.service;
 
-import com.ironhack.MatriQ_backend.dtos.review.ReviewCreateDto;
-import com.ironhack.MatriQ_backend.dtos.review.ReviewResponseDto;
+import com.ironhack.MatriQ_backend.dto.review.ReviewCreateDto;
+import com.ironhack.MatriQ_backend.dto.review.ReviewResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.UUID;

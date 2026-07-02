@@ -1,9 +1,9 @@
-package com.ironhack.MatriQ_backend.controllers;
+package com.ironhack.MatriQ_backend.controller;
 
-import com.ironhack.MatriQ_backend.dtos.listing.ListingCreateDto;
-import com.ironhack.MatriQ_backend.dtos.listing.ListingFilterDto;
-import com.ironhack.MatriQ_backend.dtos.listing.ListingResponseDto;
-import com.ironhack.MatriQ_backend.services.ListingService;
+import com.ironhack.MatriQ_backend.dto.listing.ListingCreateDto;
+import com.ironhack.MatriQ_backend.dto.listing.ListingFilterDto;
+import com.ironhack.MatriQ_backend.dto.listing.ListingResponseDto;
+import com.ironhack.MatriQ_backend.service.ListingService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

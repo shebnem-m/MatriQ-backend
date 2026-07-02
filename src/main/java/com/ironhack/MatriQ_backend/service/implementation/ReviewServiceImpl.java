@@ -1,11 +1,11 @@
-package com.ironhack.MatriQ_backend.services.implementation;
+package com.ironhack.MatriQ_backend.service.implementation;
 
-import com.ironhack.MatriQ_backend.dtos.review.ReviewCreateDto;
-import com.ironhack.MatriQ_backend.dtos.review.ReviewResponseDto;
+import com.ironhack.MatriQ_backend.dto.review.ReviewCreateDto;
+import com.ironhack.MatriQ_backend.dto.review.ReviewResponseDto;
 import com.ironhack.MatriQ_backend.entity.Review;
 import com.ironhack.MatriQ_backend.mapper.ReviewMapper;
 import com.ironhack.MatriQ_backend.repository.ReviewRepository;
-import com.ironhack.MatriQ_backend.services.ReviewService;
+import com.ironhack.MatriQ_backend.service.ReviewService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
