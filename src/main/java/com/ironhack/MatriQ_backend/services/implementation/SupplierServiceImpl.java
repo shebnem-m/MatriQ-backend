@@ -6,7 +6,7 @@ import com.ironhack.MatriQ_backend.dto.supplier.SupplierUpdateDTO;
 import com.ironhack.MatriQ_backend.entity.Supplier;
 import com.ironhack.MatriQ_backend.exceptions.ResourceNotFoundException;
 import com.ironhack.MatriQ_backend.mapper.SupplierMapper;
-import com.ironhack.MatriQ_backend.repositories.SupplierRepository;
+import com.ironhack.MatriQ_backend.repository.SupplierRepository;
 import com.ironhack.MatriQ_backend.services.SupplierService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

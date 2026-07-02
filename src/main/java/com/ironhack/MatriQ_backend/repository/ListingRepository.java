@@ -1,4 +1,4 @@
-package com.ironhack.MatriQ_backend.repositories;
+package com.ironhack.MatriQ_backend.repository;
 
 import com.ironhack.MatriQ_backend.entity.Listing;
 import org.springframework.data.domain.Page;

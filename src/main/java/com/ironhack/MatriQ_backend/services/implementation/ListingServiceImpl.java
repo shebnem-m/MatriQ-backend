@@ -5,7 +5,7 @@ import com.ironhack.MatriQ_backend.dto.listing.ListingFilterDto;
 import com.ironhack.MatriQ_backend.dto.listing.ListingResponseDto;
 import com.ironhack.MatriQ_backend.entity.Listing;
 import com.ironhack.MatriQ_backend.mapper.ListingMapper;
-import com.ironhack.MatriQ_backend.repositories.ListingRepository;
+import com.ironhack.MatriQ_backend.repository.ListingRepository;
 import com.ironhack.MatriQ_backend.services.ListingService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

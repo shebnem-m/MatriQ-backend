@@ -4,7 +4,7 @@ import com.ironhack.MatriQ_backend.dto.review.ReviewCreateDto;
 import com.ironhack.MatriQ_backend.dto.review.ReviewResponseDto;
 import com.ironhack.MatriQ_backend.entity.Review;
 import com.ironhack.MatriQ_backend.mapper.ReviewMapper;
-import com.ironhack.MatriQ_backend.repositories.ReviewRepository;
+import com.ironhack.MatriQ_backend.repository.ReviewRepository;
 import com.ironhack.MatriQ_backend.services.ReviewService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
