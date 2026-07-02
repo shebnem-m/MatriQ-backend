@@ -1,8 +1,8 @@
 package com.ironhack.MatriQ_backend.services;
 
-import com.ironhack.MatriQ_backend.dtos.SupplierCreateDTO;
-import com.ironhack.MatriQ_backend.dtos.SupplierResponseDTO;
-import com.ironhack.MatriQ_backend.dtos.SupplierUpdateDTO;
+import com.ironhack.MatriQ_backend.dto.supplier.SupplierCreateDTO;
+import com.ironhack.MatriQ_backend.dto.supplier.SupplierResponseDTO;
+import com.ironhack.MatriQ_backend.dto.supplier.SupplierUpdateDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

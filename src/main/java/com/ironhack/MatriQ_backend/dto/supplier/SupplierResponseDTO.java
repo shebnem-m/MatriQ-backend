@@ -1,26 +1,29 @@
-package com.ironhack.MatriQ_backend.dtos;
+package com.ironhack.MatriQ_backend.dto.supplier;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
-public class SupplierUpdateDTO {
+public class SupplierResponseDTO {
     
-    @NotBlank(message = "Name cannot be blank")
+    private UUID id;
+    private UUID ownerId;
     private String name;
-    
     private String description;
-    
-    @NotBlank(message = "Email cannot be blank")
-    @Email(message = "Email should be valid")
     private String email;
-    
     private String phoneNumber;
     private String address;
+    private LocalDateTime createdAt;
 
     // Constructors
-    public SupplierUpdateDTO() {}
+    public SupplierResponseDTO() {}
 
     // Getters and Setters
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
+
+    public UUID getOwnerId() { return ownerId; }
+    public void setOwnerId(UUID ownerId) { this.ownerId = ownerId; }
+
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
@@ -35,4 +38,7 @@ public class SupplierUpdateDTO {
 
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

@@ -1,14 +1,9 @@
-package com.ironhack.MatriQ_backend.dtos;
+package com.ironhack.MatriQ_backend.dto.supplier;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import java.util.UUID;
 
-public class SupplierCreateDTO {
-    
-    @NotNull(message = "Owner ID cannot be null")
-    private UUID ownerId;
+public class SupplierUpdateDTO {
     
     @NotBlank(message = "Name cannot be blank")
     private String name;
@@ -23,12 +18,9 @@ public class SupplierCreateDTO {
     private String address;
 
     // Constructors
-    public SupplierCreateDTO() {}
+    public SupplierUpdateDTO() {}
 
     // Getters and Setters
-    public UUID getOwnerId() { return ownerId; }
-    public void setOwnerId(UUID ownerId) { this.ownerId = ownerId; }
-
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
