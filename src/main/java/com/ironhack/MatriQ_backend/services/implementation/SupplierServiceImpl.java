@@ -1,9 +1,10 @@
-package com.ironhack.MatriQ_backend.services.impl;
+package com.ironhack.MatriQ_backend.services.implementation;
 
 import com.ironhack.MatriQ_backend.dto.supplier.SupplierCreateDTO;
 import com.ironhack.MatriQ_backend.dto.supplier.SupplierResponseDTO;
 import com.ironhack.MatriQ_backend.dto.supplier.SupplierUpdateDTO;
 import com.ironhack.MatriQ_backend.entity.Supplier;
+import com.ironhack.MatriQ_backend.entity.User;
 import com.ironhack.MatriQ_backend.exceptions.ResourceNotFoundException;
 import com.ironhack.MatriQ_backend.mapper.SupplierMapper;
 import com.ironhack.MatriQ_backend.repository.SupplierRepository;
