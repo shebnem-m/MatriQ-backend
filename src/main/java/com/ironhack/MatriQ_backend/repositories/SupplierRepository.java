@@ -1,0 +1,16 @@
+package com.ironhack.MatriQ_backend.repositories;
+
+import com.ironhack.MatriQ_backend.entities.Supplier;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.UUID;
+
+@Repository
+public interface SupplierRepository extends JpaRepository<Supplier, UUID> {
+    
+    List<Supplier> findByOwnerId(UUID ownerId);
+    
+    List<Supplier> searchByNameContainingIgnoreCase(String name);
+}
