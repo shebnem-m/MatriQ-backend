@@ -1,11 +1,11 @@
 package com.ironhack.MatriQ_backend.services.implementation;
 
-import com.ironhack.MatriQ_backend.dtos.ListingCreateDto;
-import com.ironhack.MatriQ_backend.dtos.ListingFilterDto;
-import com.ironhack.MatriQ_backend.dtos.ListingResponseDto;
-import com.ironhack.MatriQ_backend.entities.Listing;
-import com.ironhack.MatriQ_backend.mappers.ListingMapper;
-import com.ironhack.MatriQ_backend.repositories.ListingRepository;
+import com.ironhack.MatriQ_backend.dtos.listing.ListingCreateDto;
+import com.ironhack.MatriQ_backend.dtos.listing.ListingFilterDto;
+import com.ironhack.MatriQ_backend.dtos.listing.ListingResponseDto;
+import com.ironhack.MatriQ_backend.entity.Listing;
+import com.ironhack.MatriQ_backend.mapper.ListingMapper;
+import com.ironhack.MatriQ_backend.repository.ListingRepository;
 import com.ironhack.MatriQ_backend.services.ListingService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

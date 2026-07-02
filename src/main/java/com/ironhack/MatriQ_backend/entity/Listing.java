@@ -1,4 +1,4 @@
-package com.ironhack.MatriQ_backend.entities;
+package com.ironhack.MatriQ_backend.entity;
 
 import com.ironhack.MatriQ_backend.enums.MaterialType;
 import com.ironhack.MatriQ_backend.enums.Unit;

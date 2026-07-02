@@ -1,4 +1,4 @@
-package com.ironhack.MatriQ_backend.entities;
+package com.ironhack.MatriQ_backend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,4 +1,4 @@
-package com.ironhack.MatriQ_backend.dtos;
+package com.ironhack.MatriQ_backend.dtos.review;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

@@ -1,4 +1,4 @@
-package com.ironhack.MatriQ_backend.dtos;
+package com.ironhack.MatriQ_backend.dtos.review;
 
 import lombok.*;
 import java.time.LocalDateTime;
