@@ -1,4 +1,4 @@
-package com.ironhack.MatriQ_backend.mappers;
+package com.ironhack.MatriQ_backend.mapper;
 
 import com.ironhack.MatriQ_backend.dto.supplier.SupplierCreateDTO;
 import com.ironhack.MatriQ_backend.dto.supplier.SupplierResponseDTO;
