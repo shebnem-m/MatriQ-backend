@@ -4,9 +4,11 @@ import com.ironhack.MatriQ_backend.dto.listing.ListingCreateDto;
 import com.ironhack.MatriQ_backend.dto.listing.ListingFilterDto;
 import com.ironhack.MatriQ_backend.dto.listing.ListingResponseDto;
 import com.ironhack.MatriQ_backend.entity.Listing;
+import com.ironhack.MatriQ_backend.exception.ResourceNotFoundException; // Ehtiyac olarsa öz exception paket yolunuzu bura yazın
 import com.ironhack.MatriQ_backend.mapper.ListingMapper;
 import com.ironhack.MatriQ_backend.repository.ListingRepository;
 import com.ironhack.MatriQ_backend.service.ListingService;
+import lombok.RequiredArgsConstructor; // Lombok annotasiyası əlavə olundu
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,15 +16,11 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ListingServiceImpl implements ListingService {
 
     private final ListingRepository listingRepository;
     private final ListingMapper listingMapper;
-
-    public ListingServiceImpl(ListingRepository listingRepository, ListingMapper listingMapper) {
-        this.listingRepository = listingRepository;
-        this.listingMapper = listingMapper;
-    }
 
     @Override
     public ListingResponseDto createListing(ListingCreateDto dto) {
@@ -40,14 +38,14 @@ public class ListingServiceImpl implements ListingService {
     @Override
     public ListingResponseDto getListingById(UUID id) {
         Listing listing = listingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Listing not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Listing not found with id: " + id)); // Dəyişdirildi
         return listingMapper.toResponseDto(listing);
     }
 
     @Override
     public ListingResponseDto updateListing(UUID id, ListingCreateDto dto) {
         Listing listing = listingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Listing not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Listing not found with id: " + id)); // Dəyişdirildi
 
         listing.setTitle(dto.getTitle());
         listing.setDescription(dto.getDescription());
@@ -65,7 +63,7 @@ public class ListingServiceImpl implements ListingService {
     @Override
     public void deleteListing(UUID id) {
         if (!listingRepository.existsById(id)) {
-            throw new RuntimeException("Listing not found with id: " + id);
+            throw new ResourceNotFoundException("Listing not found with id: " + id); // Dəyişdirildi
         }
         listingRepository.deleteById(id);
     }
