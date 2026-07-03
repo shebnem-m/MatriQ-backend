@@ -1,4 +1,4 @@
-package com.ironhack.MatriQ_backend.dtos.listing;
+package com.ironhack.MatriQ_backend.dto.listing;
 
 import lombok.*;
 import java.math.BigDecimal;

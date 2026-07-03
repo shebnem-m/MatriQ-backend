@@ -3,9 +3,11 @@ package com.ironhack.MatriQ_backend.service.implementation;
 import com.ironhack.MatriQ_backend.dto.review.ReviewCreateDto;
 import com.ironhack.MatriQ_backend.dto.review.ReviewResponseDto;
 import com.ironhack.MatriQ_backend.entity.Review;
+import com.ironhack.MatriQ_backend.exception.ResourceNotFoundException; // Exception importu əlavə olundu
 import com.ironhack.MatriQ_backend.mapper.ReviewMapper;
 import com.ironhack.MatriQ_backend.repository.ReviewRepository;
 import com.ironhack.MatriQ_backend.service.ReviewService;
+import lombok.RequiredArgsConstructor; // Lombok importu əlavə olundu
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,15 +15,11 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
-
-    public ReviewServiceImpl(ReviewRepository reviewRepository, ReviewMapper reviewMapper) {
-        this.reviewRepository = reviewRepository;
-        this.reviewMapper = reviewMapper;
-    }
 
     @Override
     public Page<ReviewResponseDto> getReviewsByListing(UUID listingId, Pageable pageable) {
@@ -39,7 +37,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewResponseDto updateReview(UUID id, ReviewCreateDto dto) {
         Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Review not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + id)); // Dəyişdirildi
 
         review.setRating(dto.getRating());
         review.setComment(dto.getComment());
@@ -51,11 +49,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteReview(UUID id) {
         if (!reviewRepository.existsById(id)) {
-            throw new RuntimeException("Review not found with id: " + id);
+            throw new ResourceNotFoundException("Review not found with id: " + id); // Dəyişdirildi
         }
         reviewRepository.deleteById(id);
     }
-
 
     public Double getAverageRatingForListing(UUID listingId) {
         Double averageRating = reviewRepository.findAverageRatingByListingId(listingId);
