@@ -13,5 +13,5 @@ public interface SupplierRepository extends JpaRepository<Supplier, UUID> {
     
     List<Supplier>  findByOwnerId(UUID ownerId );
     
-    List<Supplier> searchByNameContainingIgnoreCase(String name);
+    List<Supplier> findByName(String name);
 }
