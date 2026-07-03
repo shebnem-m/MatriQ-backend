@@ -1,13 +1,12 @@
 package com.ironhack.MatriQ_backend.entity;
 
+import com.ironhack.MatriQ_backend.entity.User;
+import com.ironhack.MatriQ_backend.entity.Listing;
 import com.ironhack.MatriQ_backend.enums.OrderStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,6 +18,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class Order {
 
     @Id
