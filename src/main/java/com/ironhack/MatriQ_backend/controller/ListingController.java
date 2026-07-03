@@ -5,6 +5,7 @@ import com.ironhack.MatriQ_backend.dto.listing.ListingFilterDto;
 import com.ironhack.MatriQ_backend.dto.listing.ListingResponseDto;
 import com.ironhack.MatriQ_backend.service.ListingService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -15,20 +16,15 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/listings")
+@RequiredArgsConstructor
 public class ListingController {
 
     private final ListingService listingService;
-
-
-    public ListingController(ListingService listingService) {
-        this.listingService = listingService;
-    }
 
     @PostMapping
     public ResponseEntity<ListingResponseDto> createListing(@Valid @RequestBody ListingCreateDto dto) {
         return new ResponseEntity<>(listingService.createListing(dto), HttpStatus.CREATED);
     }
-
 
     @GetMapping
     public ResponseEntity<Page<ListingResponseDto>> getAllListings(Pageable pageable) {
