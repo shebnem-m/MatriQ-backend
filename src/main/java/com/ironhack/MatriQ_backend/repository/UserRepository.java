@@ -1,5 +1,5 @@
 package com.ironhack.MatriQ_backend.repository;
-import com.ironhack.MatriQ_backend.entity.UserRole;
+import com.ironhack.MatriQ_backend.enums.UserRole;
 import com.ironhack.MatriQ_backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
