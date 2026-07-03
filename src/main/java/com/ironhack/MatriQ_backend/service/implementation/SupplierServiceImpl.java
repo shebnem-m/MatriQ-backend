@@ -1,14 +1,14 @@
-package com.ironhack.MatriQ_backend.services.impl;
+package com.ironhack.MatriQ_backend.service.implementation;
 
-import com.ironhack.MatriQ_backend.dtos.SupplierCreateDTO;
-import com.ironhack.MatriQ_backend.dtos.SupplierResponseDTO;
-import com.ironhack.MatriQ_backend.dtos.SupplierUpdateDTO;
-import com.ironhack.MatriQ_backend.entities.Supplier;
-import com.ironhack.MatriQ_backend.entities.User;
-import com.ironhack.MatriQ_backend.exceptions.ResourceNotFoundException;
-import com.ironhack.MatriQ_backend.mappers.SupplierMapper;
-import com.ironhack.MatriQ_backend.repositories.SupplierRepository;
-import com.ironhack.MatriQ_backend.services.SupplierService;
+import com.ironhack.MatriQ_backend.dto.supplier.SupplierCreateDTO;
+import com.ironhack.MatriQ_backend.dto.supplier.SupplierResponseDTO;
+import com.ironhack.MatriQ_backend.dto.supplier.SupplierUpdateDTO;
+import com.ironhack.MatriQ_backend.entity.Supplier;
+import com.ironhack.MatriQ_backend.entity.User;
+import com.ironhack.MatriQ_backend.exception.ResourceNotFoundException;
+import com.ironhack.MatriQ_backend.mapper.SupplierMapper;
+import com.ironhack.MatriQ_backend.repository.SupplierRepository;
+import com.ironhack.MatriQ_backend.service.SupplierService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class SupplierServiceImpl implements SupplierService {
     public SupplierResponseDTO createSupplier(SupplierCreateDTO createDTO) {
         Supplier supplier = supplierMapper.toEntity(createDTO);
         
-        // Use our placeholder User entity to set the foreign key
+        // Use placeholder User entity to set the foreign key
         supplier.setOwner(new User(createDTO.getOwnerId()));
         
         Supplier savedSupplier = supplierRepository.save(supplier);

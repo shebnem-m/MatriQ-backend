@@ -1,4 +1,5 @@
-package com.ironhack.MatriQ_backend.entities;
+package com.ironhack.MatriQ_backend.entity;
+
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -7,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "suppliers")
+@Table(name  = "suppliers")
 public class Supplier {
 
     @Id
@@ -32,6 +33,7 @@ public class Supplier {
 
     private String address;
 
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -40,10 +42,10 @@ public class Supplier {
     public Supplier() {
     }
 
-    public Supplier(User owner, String name, String description, String email, String phoneNumber, String address) {
+    public Supplier(User owner,  String name, String description, String email, String phoneNumber, String address) {
         this.owner = owner;
         this.name = name;
-        this.description = description;
+        this.description = description ;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.address = address;
@@ -58,12 +60,11 @@ public class Supplier {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
     public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setEmail(String email) {  this.email = email; }
 
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
@@ -73,4 +74,6 @@ public class Supplier {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+
 }
