@@ -126,7 +126,7 @@ public class OrderServiceImpl implements OrderService {
         validateTransition(currentStatus, newStatus);
 
         if (newStatus == OrderStatus.CANCELLED) {
-            Listing listing = listingRepository.findById(order.getListingId())
+            Listing listing = listingRepository.findById(order.getListing().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Listing not found"));
             listing.setStockQuantity(listing.getStockQuantity() + order.getQuantity());
             listingRepository.save(listing);
