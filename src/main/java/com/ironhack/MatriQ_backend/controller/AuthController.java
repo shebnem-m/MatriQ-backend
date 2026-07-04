@@ -33,7 +33,7 @@ public class AuthController {
             role = UserRole.valueOf(request.role().toString().toUpperCase());
         }
 
-        UserResponse user = userService.createUser(request);
+        UserResponse user = authService.register(request);
 
         String token = jwtTokenProvider.generateToken(
                 user.email(),
