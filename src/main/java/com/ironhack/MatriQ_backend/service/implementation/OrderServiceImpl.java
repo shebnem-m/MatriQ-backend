@@ -8,12 +8,14 @@ import com.ironhack.MatriQ_backend.entity.User;
 import com.ironhack.MatriQ_backend.entity.Listing;
 import com.ironhack.MatriQ_backend.enums.OrderStatus;
 import com.ironhack.MatriQ_backend.exception.InsufficientStockException;
+import com.ironhack.MatriQ_backend.exception.InvalidStatusUpdateException;
 import com.ironhack.MatriQ_backend.exception.ResourceNotFoundException;
 import com.ironhack.MatriQ_backend.mapper.OrderMapper;
 import com.ironhack.MatriQ_backend.repository.OrderRepository;
 import com.ironhack.MatriQ_backend.repository.UserRepository;
 import com.ironhack.MatriQ_backend.repository.ListingRepository;
 import com.ironhack.MatriQ_backend.service.OrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,22 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final ListingRepository listingRepository;
     private final OrderMapper orderMapper;
     private final UserRepository userRepository;
-
-    public OrderServiceImpl(OrderRepository orderRepository,
-                            ListingRepository listingRepository,
-                            OrderMapper orderMapper,
-                            UserRepository userRepository) {
-        this.orderRepository = orderRepository;
-        this.listingRepository = listingRepository;
-        this.orderMapper = orderMapper;
-        this.userRepository = userRepository;
-    }
 
     @Override
     @Transactional
@@ -106,14 +99,41 @@ public class OrderServiceImpl implements OrderService {
         return orders.map(orderMapper::toResponseDTO);
     }
 
+    private void validateTransition(OrderStatus current, OrderStatus next) {
+        boolean isValid = switch (current) {
+            case PENDING -> next == OrderStatus.CONFIRMED || next == OrderStatus.CANCELLED;
+            case CONFIRMED -> next == OrderStatus.SHIPPED || next == OrderStatus.CANCELLED;
+            case SHIPPED -> next == OrderStatus.COMPLETED;
+            case COMPLETED -> false; // terminal, nothing allowed after
+            case CANCELLED -> false; // terminal, nothing allowed after
+        };
+
+        if (!isValid) {
+            throw new InvalidStatusUpdateException(
+                    "Cannot change order status from " + current + " to " + next);
+        }
+    }
+
     @Override
-    public OrderResponse updateStatus(UUID id, ChangeOrderStatusRequest request){
+    @Transactional
+    public OrderResponse updateStatus(UUID id, ChangeOrderStatusRequest request) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
 
-        order.setStatus(request.status());
-        orderRepository.save(order);
-        return orderMapper.toResponseDTO(order);
+        OrderStatus currentStatus = order.getStatus();
+        OrderStatus newStatus = request.status();
+
+        validateTransition(currentStatus, newStatus);
+
+        if (newStatus == OrderStatus.CANCELLED) {
+            Listing listing = listingRepository.findById(order.getListingId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Listing not found"));
+            listing.setStockQuantity(listing.getStockQuantity() + order.getQuantity());
+            listingRepository.save(listing);
+        }
+
+        order.setStatus(newStatus);
+        return orderMapper.toResponseDTO(orderRepository.save(order));
     }
 
     @Override

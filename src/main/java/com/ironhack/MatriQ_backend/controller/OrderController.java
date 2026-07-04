@@ -6,6 +6,7 @@ import com.ironhack.MatriQ_backend.dto.order.OrderResponse;
 import com.ironhack.MatriQ_backend.enums.OrderStatus;
 import com.ironhack.MatriQ_backend.service.OrderService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,13 +19,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/orders")
+@RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
-
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
 
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(
@@ -42,8 +40,7 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<Page<OrderResponse>> getOrders(
-            @RequestParam(required = false) OrderStatus status,
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+            @RequestParam(required = false) OrderStatus status, Pageable pageable) {
 
         return ResponseEntity.ok(orderService.getOrders(status, pageable));
     }
