@@ -12,26 +12,26 @@ import com.ironhack.MatriQ_backend.service.SupplierService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
+import com.ironhack.MatriQ_backend.repository.UserRepository;
 
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class SupplierServiceImpl implements SupplierService {
 
     private final SupplierRepository supplierRepository;
     private final SupplierMapper supplierMapper;
-
-    public SupplierServiceImpl(SupplierRepository supplierRepository, SupplierMapper supplierMapper) {
-        this.supplierRepository = supplierRepository;
-        this.supplierMapper = supplierMapper;
-    }
+    private final UserRepository userRepository;
 
     @Override
     public SupplierResponseDTO createSupplier(SupplierCreateDTO createDTO) {
         Supplier supplier = supplierMapper.toEntity(createDTO);
         
-        // Use placeholder User entity to set the foreign key
-        supplier.setOwner(new User(createDTO.getOwnerId()));
+        User owner = userRepository.findById(createDTO.getOwnerId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + createDTO.getOwnerId()));
+        supplier.setOwner(owner);
         
         Supplier savedSupplier = supplierRepository.save(supplier);
         return supplierMapper.toResponseDTO(savedSupplier);
