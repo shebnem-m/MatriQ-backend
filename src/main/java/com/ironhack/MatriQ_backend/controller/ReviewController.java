@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -26,16 +27,19 @@ public class ReviewController {
     }
 
     @PostMapping("/listings/{id}/reviews")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'CUSTOMER')")
     public ResponseEntity<ReviewResponseDto> createReview(@PathVariable UUID id, @Valid @RequestBody ReviewCreateDto dto) {
         return new ResponseEntity<>(reviewService.createReview(id, dto), HttpStatus.CREATED);
     }
 
     @PutMapping("/reviews/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'CUSTOMER')")
     public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable UUID id, @Valid @RequestBody ReviewCreateDto dto) {
         return ResponseEntity.ok(reviewService.updateReview(id, dto));
     }
 
     @DeleteMapping("/reviews/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<Void> deleteReview(@PathVariable UUID id) {
         reviewService.deleteReview(id);
         return ResponseEntity.noContent().build();
