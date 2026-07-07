@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class ListingController {
     private final ListingService listingService;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ListingResponseDto> createListing(@Valid @RequestBody ListingCreateDto dto) {
         return new ResponseEntity<>(listingService.createListing(dto), HttpStatus.CREATED);
     }
@@ -37,11 +39,13 @@ public class ListingController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ListingResponseDto> updateListing(@PathVariable UUID id, @Valid @RequestBody ListingCreateDto dto) {
         return ResponseEntity.ok(listingService.updateListing(id, dto));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteListing(@PathVariable UUID id) {
         listingService.deleteListing(id);
         return ResponseEntity.noContent().build();

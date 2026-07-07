@@ -1,9 +1,7 @@
 package com.ironhack.MatriQ_backend.config;
 
-
 import com.ironhack.MatriQ_backend.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,11 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -33,10 +26,6 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    @Value("${frontend.allowed-origins}")
-    private List<String> allowedOrigins;
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -60,33 +49,31 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasRole("ADMIN")
+
+
+                        .requestMatchers(HttpMethod.GET, "/listings/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/orders").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/listings/*/reviews/*").hasRole("ADMIN")
+
+
+                        .requestMatchers(HttpMethod.POST, "/listings/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/listings/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/orders/**").hasRole("CUSTOMER")
+
 
                         .anyRequest().authenticated()
                 )
 
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
 
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-
-        config.setAllowedOrigins(allowedOrigins);
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-
-        config.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
     }
 }

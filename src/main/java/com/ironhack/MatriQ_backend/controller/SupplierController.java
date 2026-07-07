@@ -9,7 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,15 +19,13 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/suppliers")
+@RequiredArgsConstructor
 public class SupplierController {
 
     private final SupplierService supplierService;
 
-    public SupplierController(SupplierService supplierService) {
-        this.supplierService = supplierService;
-    }
-
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<SupplierResponseDTO> createSupplier(@Valid @RequestBody SupplierCreateDTO createDTO) {
         SupplierResponseDTO response = supplierService.createSupplier(createDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -44,12 +44,14 @@ public class SupplierController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<SupplierResponseDTO> updateSupplier(@PathVariable UUID id, @Valid @RequestBody SupplierUpdateDTO updateDTO) {
         SupplierResponseDTO response = supplierService.updateSupplier(id, updateDTO);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteSupplier(@PathVariable UUID id) {
         supplierService.deleteSupplier(id);
         return ResponseEntity.noContent().build();
@@ -57,8 +59,6 @@ public class SupplierController {
 
     @GetMapping("/{id}/listings")
     public ResponseEntity<List<Object>> getSupplierListings(@PathVariable UUID id) {
-        // TODO: Integrate with Listing module once Yaqut has finished it.
-        // For now, we return an empty list to satisfy the endpoint requirement and compile safely.
         return ResponseEntity.ok(Collections.emptyList());
     }
 }
