@@ -56,6 +56,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.updateStatus(id, request));
     }
 
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteOrder(@PathVariable UUID id) {

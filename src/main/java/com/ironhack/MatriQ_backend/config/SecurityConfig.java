@@ -48,23 +48,21 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
+
+
                 .authorizeHttpRequests(auth -> auth
-
                         .requestMatchers("/api/auth/**").permitAll()
-
-
                         .requestMatchers(HttpMethod.GET, "/listings/**").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/orders").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/listings/*/reviews/*").hasRole("ADMIN")
-
 
                         .requestMatchers(HttpMethod.POST, "/listings/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers(HttpMethod.PUT, "/listings/**").hasAnyRole("ADMIN", "MANAGER")
-                        .requestMatchers(HttpMethod.POST, "/orders/**").hasRole("CUSTOMER")
 
+                        .requestMatchers("/orders/**").authenticated()
+                        .requestMatchers("/users/**").authenticated()
 
                         .anyRequest().authenticated()
                 )
