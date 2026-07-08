@@ -18,6 +18,9 @@ import com.ironhack.MatriQ_backend.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,11 +35,28 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final UserRepository userRepository;
 
+    private String getCurrentUserEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (authentication != null) ? authentication.getName() : null;
+    }
+
+    private boolean isCurrentUserAdminOrManager() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) return false;
+        return authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") || a.getAuthority().equals("ROLE_MANAGER"));
+    }
+
     @Override
     @Transactional
     public OrderResponse createOrder(CreateOrderRequest request, UUID buyerId) {
         User user = userRepository.findById(buyerId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        String currentUserEmail = getCurrentUserEmail();
+        if (!isCurrentUserAdminOrManager() && (currentUserEmail == null || !currentUserEmail.equals(user.getEmail()))) {
+            throw new AccessDeniedException("You cannot place an order on behalf of another user.");
+        }
 
         Listing listing = listingRepository.findById(request.listingId())
                 .orElseThrow(() -> new ResourceNotFoundException("Listing not found"));
@@ -77,6 +97,11 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
 
+        String currentUserEmail = getCurrentUserEmail();
+        if (order.getBuyer() == null || (!isCurrentUserAdminOrManager() && (currentUserEmail == null || !currentUserEmail.equals(order.getBuyer().getEmail())))) {
+            throw new AccessDeniedException("You do not have permission to view this order.");
+        }
+
         return orderMapper.toResponseDTO(order);
     }
 
@@ -94,8 +119,12 @@ public class OrderServiceImpl implements OrderService {
         User user = userRepository.findById(buyerId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        Page<Order> orders = orderRepository.findByBuyerId(buyerId, pageable);
+        String currentUserEmail = getCurrentUserEmail();
+        if (!isCurrentUserAdminOrManager() && (currentUserEmail == null || !currentUserEmail.equals(user.getEmail()))) {
+            throw new AccessDeniedException("You do not have permission to view other users' order list.");
+        }
 
+        Page<Order> orders = orderRepository.findByBuyerId(buyerId, pageable);
         return orders.map(orderMapper::toResponseDTO);
     }
 
@@ -104,8 +133,8 @@ public class OrderServiceImpl implements OrderService {
             case PENDING -> next == OrderStatus.CONFIRMED || next == OrderStatus.CANCELLED;
             case CONFIRMED -> next == OrderStatus.SHIPPED || next == OrderStatus.CANCELLED;
             case SHIPPED -> next == OrderStatus.COMPLETED;
-            case COMPLETED -> false; // terminal, nothing allowed after
-            case CANCELLED -> false; // terminal, nothing allowed after
+            case COMPLETED -> false;
+            case CANCELLED -> false;
         };
 
         if (!isValid) {
@@ -143,5 +172,4 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.delete(order);
     }
-
 }
