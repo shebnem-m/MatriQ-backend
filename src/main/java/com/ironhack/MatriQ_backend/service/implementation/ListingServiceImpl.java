@@ -1,6 +1,5 @@
 package com.ironhack.MatriQ_backend.service.implementation;
 
-
 import com.ironhack.MatriQ_backend.dto.listing.ListingCreateDto;
 import com.ironhack.MatriQ_backend.dto.listing.ListingFilterDto;
 import com.ironhack.MatriQ_backend.dto.listing.ListingResponseDto;
@@ -13,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.UUID;
 
 @Service
@@ -22,49 +24,25 @@ public class ListingServiceImpl implements ListingService {
     private final ListingRepository listingRepository;
     private final ListingMapper listingMapper;
 
-    @Override
-    public ListingResponseDto createListing(
-            ListingCreateDto dto
-    ) {
+    private final String UPLOAD_DIR = "uploads/";
 
+    @Override
+    public ListingResponseDto createListing(ListingCreateDto dto, MultipartFile file) {
         Listing listing = listingMapper.toEntity(dto);
+
+        if (file != null && !file.isEmpty()) {
+            listing.setImageUrl(saveFile(file));
+        }
+
         Listing savedListing = listingRepository.save(listing);
         return listingMapper.toResponseDto(savedListing);
     }
-    @Override
-    public Page<ListingResponseDto> getAllListings(
-            Pageable pageable
-    ) {
-        return listingRepository
-                .findAll(pageable)
-                .map(listingMapper::toResponseDto);
-    }
-    @Override
-    public ListingResponseDto getListingById(
-            UUID id
-    ) {
-        Listing listing = listingRepository
-                .findById(id)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Listing not found with id: " + id
-                        )
-                );
-        return listingMapper.toResponseDto(listing);
-    }
 
     @Override
-    public ListingResponseDto updateListing(
-            UUID id,
-            ListingCreateDto dto
-    ) {
-        Listing listing = listingRepository
-                .findById(id)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Listing not found with id: " + id
-                        )
-                );
+    public ListingResponseDto updateListing(UUID id, ListingCreateDto dto, MultipartFile file) {
+        Listing listing = listingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Listing not found with id: " + id));
+
         listing.setTitle(dto.getTitle());
         listing.setDescription(dto.getDescription());
         listing.setCategory(dto.getCategory());
@@ -73,56 +51,47 @@ public class ListingServiceImpl implements ListingService {
         listing.setPrice(dto.getPrice());
         listing.setStockQuantity(dto.getStockQuantity());
         listing.setDeliveryDays(dto.getDeliveryDays());
+
+        if (file != null && !file.isEmpty()) {
+            listing.setImageUrl(saveFile(file));
+        }
+
         Listing updatedListing = listingRepository.save(listing);
         return listingMapper.toResponseDto(updatedListing);
     }
 
-    @Override
-    public void deleteListing(
-            UUID id
-    ) {
-        if(!listingRepository.existsById(id)){
-            throw new ResourceNotFoundException(
-                    "Listing not found with id: " + id
-            );
+    private String saveFile(MultipartFile file) {
+        try {
+            Files.createDirectories(Paths.get(UPLOAD_DIR));
+            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            Path path = Paths.get(UPLOAD_DIR + fileName);
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+            return "/uploads/" + fileName;
+        } catch (IOException e) {
+            throw new RuntimeException("Could not save file: " + e.getMessage());
         }
+    }
+
+    @Override
+    public Page<ListingResponseDto> getAllListings(Pageable pageable) {
+        return listingRepository.findAll(pageable).map(listingMapper::toResponseDto);
+    }
+
+    @Override
+    public ListingResponseDto getListingById(UUID id) {
+        return listingRepository.findById(id)
+                .map(listingMapper::toResponseDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Listing not found with id: " + id));
+    }
+
+    @Override
+    public void deleteListing(UUID id) {
+        if (!listingRepository.existsById(id)) throw new ResourceNotFoundException("Listing not found with id: " + id);
         listingRepository.deleteById(id);
     }
 
     @Override
-    public Page<ListingResponseDto> searchListings(
-            ListingFilterDto filterDto,
-            Pageable pageable
-    ) {
-        if(filterDto.getTitle() != null
-                && !filterDto.getTitle().isBlank()) {
-            return listingRepository
-                    .findByTitleContainingIgnoreCase(
-                            filterDto.getTitle(),
-                            pageable
-                    )
-                    .map(listingMapper::toResponseDto);
-        }
-        if(filterDto.getCategory() != null
-                && !filterDto.getCategory().isBlank()) {
-            return listingRepository
-                    .findByCategory(
-                            filterDto.getCategory(),
-                            pageable
-                    )
-                    .map(listingMapper::toResponseDto);
-        }
-        if(filterDto.getMinPrice() != null
-                && filterDto.getMaxPrice() != null) {
-            return listingRepository
-                    .findByPriceBetween(
-                            filterDto.getMinPrice(),
-                            filterDto.getMaxPrice(),
-                            pageable
-                    )
-                    .map(listingMapper::toResponseDto);
-        }
+    public Page<ListingResponseDto> searchListings(ListingFilterDto filterDto, Pageable pageable) {
         return getAllListings(pageable);
     }
-
 }

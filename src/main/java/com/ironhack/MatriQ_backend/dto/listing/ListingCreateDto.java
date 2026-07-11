@@ -25,6 +25,8 @@ public class ListingCreateDto {
 
     private String description;
 
+    private String imageUrl;
+
     @NotBlank(message = "Category cannot be blank")
     private String category;
 
