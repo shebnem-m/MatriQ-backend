@@ -16,6 +16,7 @@ import java.util.UUID;
 public class ListingResponseDto {
     private UUID id;
     private UUID supplierId;
+    private String imageUrl;
     private String title;
     private String description;
     private String category;

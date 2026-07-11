@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
-### Sensitive files ###
+uploads/*
+
+!uploads/.gitkeep
+
 src/main/resources/application.properties
 .env

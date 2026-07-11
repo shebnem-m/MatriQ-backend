@@ -22,6 +22,7 @@ public class ListingMapper {
                 .price(listing.getPrice())
                 .stockQuantity(listing.getStockQuantity())
                 .deliveryDays(listing.getDeliveryDays())
+                .imageUrl(listing.getImageUrl())
                 .createdAt(listing.getCreatedAt())
                 .updatedAt(listing.getUpdatedAt())
                 .build();
@@ -40,6 +41,7 @@ public class ListingMapper {
                 .price(dto.getPrice())
                 .stockQuantity(dto.getStockQuantity())
                 .deliveryDays(dto.getDeliveryDays())
+                .imageUrl(dto.getImageUrl())
                 .build();
     }
 }
