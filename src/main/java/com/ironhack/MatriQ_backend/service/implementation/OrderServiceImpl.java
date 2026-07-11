@@ -44,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) return false;
         return authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") || a.getAuthority().equals("ROLE_MANAGER"));
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") || a.getAuthority().equals("ROLE_SUPPLIER"));
     }
 
     @Override
@@ -171,5 +171,27 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
 
         orderRepository.delete(order);
+    }
+
+    @Override
+    public OrderResponse cancelOrder(UUID id){
+        String currentUserEmail = getCurrentUserEmail();
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+        if(order.getBuyer().getEmail().equals(currentUserEmail) || isCurrentUserAdminOrManager()){
+            if(order.getStatus().toString().equals("PENDING")){
+                order.setStatus(OrderStatus.CANCELLED);
+                orderRepository.save(order);
+            }
+            else {
+                throw new InvalidStatusUpdateException("Only PENDING orders can be cancelled");
+            }
+        }
+        else {
+            throw new InvalidStatusUpdateException("You can only cancel orders that belong to you!");
+        }
+
+        return orderMapper.toResponseDTO(order);
     }
 }
