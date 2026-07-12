@@ -16,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.UUID;
+import jakarta.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -92,6 +95,31 @@ public class ListingServiceImpl implements ListingService {
 
     @Override
     public Page<ListingResponseDto> searchListings(ListingFilterDto filterDto, Pageable pageable) {
-        return getAllListings(pageable);
+        return listingRepository.findAll((root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (filterDto.getTitle() != null && !filterDto.getTitle().isBlank()) {
+                predicates.add(
+                        cb.like(
+                                cb.lower(root.get("title")),
+                                filterDto.getTitle().toLowerCase() + "%"
+                        )
+                );
+            }
+
+            if (filterDto.getCategory() != null && !filterDto.getCategory().isBlank()) {
+                predicates.add(cb.equal(root.get("category"), filterDto.getCategory()));
+            }
+
+            if (filterDto.getMinPrice() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("price"), filterDto.getMinPrice()));
+            }
+
+            if (filterDto.getMaxPrice() != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("price"), filterDto.getMaxPrice()));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        }, pageable).map(listingMapper::toResponseDto);
     }
 }
