@@ -63,8 +63,11 @@ public class ListingController {
     @GetMapping("/search")
     public ResponseEntity<Page<ListingResponseDto>> searchListings(
             @ModelAttribute ListingFilterDto filterDto,
-            Pageable pageable
-    ){
+            @RequestParam(defaultValue = "price-low") String sort,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size
+    ) {
+        Pageable pageable = createPageable(sort, page, size);
         return ResponseEntity.ok(listingService.searchListings(filterDto, pageable));
     }
 

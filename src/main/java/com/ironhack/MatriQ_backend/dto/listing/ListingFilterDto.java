@@ -1,5 +1,6 @@
 package com.ironhack.MatriQ_backend.dto.listing;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import java.math.BigDecimal;
 
