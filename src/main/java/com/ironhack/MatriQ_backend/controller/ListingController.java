@@ -67,11 +67,7 @@ public class ListingController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size
     ) {
-
-        System.out.println("TITLE = " + filterDto.getTitle());
-
         Pageable pageable = createPageable(sort, page, size);
-
         return ResponseEntity.ok(listingService.searchListings(filterDto, pageable));
     }
 
