@@ -16,4 +16,5 @@ public interface OrderService {
     Page<OrderResponse> getOrdersByBuyerId(UUID buyerId, Pageable pageable);
     OrderResponse updateStatus(UUID id, ChangeOrderStatusRequest request);
     void deleteOrder(UUID id);
+    OrderResponse cancelOrder(UUID id);
 }

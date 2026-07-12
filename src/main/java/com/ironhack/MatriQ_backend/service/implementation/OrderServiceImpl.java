@@ -4,14 +4,17 @@ import com.ironhack.MatriQ_backend.dto.order.ChangeOrderStatusRequest;
 import com.ironhack.MatriQ_backend.dto.order.CreateOrderRequest;
 import com.ironhack.MatriQ_backend.dto.order.OrderResponse;
 import com.ironhack.MatriQ_backend.entity.Order;
+import com.ironhack.MatriQ_backend.entity.Supplier;
 import com.ironhack.MatriQ_backend.entity.User;
 import com.ironhack.MatriQ_backend.entity.Listing;
 import com.ironhack.MatriQ_backend.enums.OrderStatus;
+import com.ironhack.MatriQ_backend.enums.UserRole;
 import com.ironhack.MatriQ_backend.exception.InsufficientStockException;
 import com.ironhack.MatriQ_backend.exception.InvalidStatusUpdateException;
 import com.ironhack.MatriQ_backend.exception.ResourceNotFoundException;
 import com.ironhack.MatriQ_backend.mapper.OrderMapper;
 import com.ironhack.MatriQ_backend.repository.OrderRepository;
+import com.ironhack.MatriQ_backend.repository.SupplierRepository;
 import com.ironhack.MatriQ_backend.repository.UserRepository;
 import com.ironhack.MatriQ_backend.repository.ListingRepository;
 import com.ironhack.MatriQ_backend.service.OrderService;
@@ -25,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -34,6 +38,7 @@ public class OrderServiceImpl implements OrderService {
     private final ListingRepository listingRepository;
     private final OrderMapper orderMapper;
     private final UserRepository userRepository;
+    private final SupplierRepository supplierRepository;
 
     private String getCurrentUserEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -44,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) return false;
         return authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") || a.getAuthority().equals("ROLE_MANAGER"));
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") || a.getAuthority().equals("ROLE_SUPPLIER"));
     }
 
     @Override
@@ -106,10 +111,44 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderResponse> getOrders(OrderStatus status, Pageable pageable){
-        Page<Order> orders = (status != null)
-                ? orderRepository.findByStatus(status, pageable)
-                : orderRepository.findAll(pageable);
+    public Page<OrderResponse> getOrders(OrderStatus status, Pageable pageable) {
+
+        User currentUser = userRepository.findByEmail(getCurrentUserEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        Page<Order> orders;
+
+        if (currentUser.getRole() == UserRole.ADMIN) {
+
+            orders = (status != null)
+                    ? orderRepository.findByStatus(status, pageable)
+                    : orderRepository.findAll(pageable);
+
+        } else if (currentUser.getRole() == UserRole.SUPPLIER) {
+
+            List<UUID> supplierIds = supplierRepository.findByOwnerId(currentUser.getId())
+                    .stream()
+                    .map(Supplier::getId)
+                    .toList();
+
+            if (supplierIds.isEmpty()) {
+                return Page.empty(pageable);
+            }
+
+            orders = (status != null)
+                    ? orderRepository.findByListingSupplierIdInAndStatus(
+                    supplierIds,
+                    status,
+                    pageable
+            )
+                    : orderRepository.findByListingSupplierIdIn(
+                    supplierIds,
+                    pageable
+            );
+
+        } else {
+            throw new AccessDeniedException("You do not have permission to view these orders.");
+        }
 
         return orders.map(orderMapper::toResponseDTO);
     }
@@ -171,5 +210,27 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
 
         orderRepository.delete(order);
+    }
+
+    @Override
+    public OrderResponse cancelOrder(UUID id){
+        String currentUserEmail = getCurrentUserEmail();
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+        if(order.getBuyer().getEmail().equals(currentUserEmail) || isCurrentUserAdminOrManager()){
+            if(order.getStatus().toString().equals("PENDING")){
+                order.setStatus(OrderStatus.CANCELLED);
+                orderRepository.save(order);
+            }
+            else {
+                throw new InvalidStatusUpdateException("Only PENDING orders can be cancelled");
+            }
+        }
+        else {
+            throw new InvalidStatusUpdateException("You can only cancel orders that belong to you!");
+        }
+
+        return orderMapper.toResponseDTO(order);
     }
 }

@@ -24,7 +24,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPPLIER', 'CUSTOMER')")
     public ResponseEntity<OrderResponse> createOrder(
             @Valid @RequestBody CreateOrderRequest request,
             @RequestParam UUID buyerId) {
@@ -34,13 +34,13 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPPLIER', 'CUSTOMER')")
     public ResponseEntity<OrderResponse> getOrderById(@PathVariable UUID id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPPLIER')")
     public ResponseEntity<Page<OrderResponse>> getOrders(
             @RequestParam(required = false) OrderStatus status, Pageable pageable) {
 
@@ -48,7 +48,7 @@ public class OrderController {
     }
 
     @PutMapping("/{id}/status")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPPLIER')")
     public ResponseEntity<OrderResponse> updateStatus(
             @PathVariable UUID id,
             @Valid @RequestBody ChangeOrderStatusRequest request) {
@@ -62,5 +62,11 @@ public class OrderController {
     public ResponseEntity<Void> deleteOrder(@PathVariable UUID id) {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/cancel")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPPLIER', 'CUSTOMER')")
+    public ResponseEntity<OrderResponse> cancelOrder(@PathVariable UUID id){
+        return ResponseEntity.ok().body(orderService.cancelOrder(id));
     }
 }
