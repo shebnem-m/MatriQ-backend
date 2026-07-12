@@ -56,6 +56,9 @@ public class Listing {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -66,4 +69,6 @@ public class Listing {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
+
 }
