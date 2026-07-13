@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     private String getCurrentUserEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -62,6 +64,7 @@ public class UserServiceImpl implements UserService {
             throw new ValidationException("Email already exists: " + dto.email());
         }
         User user = userMapper.toEntity(dto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userMapper.toResponseDTO(userRepository.save(user));
     }
 
