@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPPLIER', 'CUSTOMER')")
     public ResponseEntity<UserResponse> getUserById(@PathVariable UUID id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/orders")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPPLIER', 'CUSTOMER')")
     public ResponseEntity<Page<OrderResponse>> getOrdersByUserId(
             @PathVariable UUID id,
             Pageable pageable) {

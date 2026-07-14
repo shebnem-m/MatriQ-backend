@@ -25,7 +25,7 @@ public class SupplierController {
     private final SupplierService supplierService;
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPPLIER')")
     public ResponseEntity<SupplierResponseDTO> createSupplier(@Valid @RequestBody SupplierCreateDTO createDTO) {
         SupplierResponseDTO response = supplierService.createSupplier(createDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -44,7 +44,7 @@ public class SupplierController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPPLIER')")
     public ResponseEntity<SupplierResponseDTO> updateSupplier(@PathVariable UUID id, @Valid @RequestBody SupplierUpdateDTO updateDTO) {
         SupplierResponseDTO response = supplierService.updateSupplier(id, updateDTO);
         return ResponseEntity.ok(response);

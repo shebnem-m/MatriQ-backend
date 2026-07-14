@@ -28,7 +28,7 @@ public class ListingController {
 
     // YENİ: Fayl yükləməni dəstəkləyən create metodu
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPPLIER')")
     public ResponseEntity<ListingResponseDto> createListing(
             @Valid @RequestPart("listing") ListingCreateDto dto,
             @RequestPart(value = "file", required = false) MultipartFile file
@@ -40,7 +40,7 @@ public class ListingController {
 
     // YENİ: Fayl yükləməni dəstəkləyən update metodu
     @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPPLIER')")
     public ResponseEntity<ListingResponseDto> updateListing(
             @PathVariable UUID id,
             @Valid @RequestPart("listing") ListingCreateDto dto,
