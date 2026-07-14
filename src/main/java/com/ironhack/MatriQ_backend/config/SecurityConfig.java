@@ -57,10 +57,8 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-
-
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/listings/**").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
@@ -69,6 +67,7 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.POST, "/listings/**").hasAnyRole("ADMIN", "SUPPLIER")
                         .requestMatchers(HttpMethod.PUT, "/listings/**").hasAnyRole("ADMIN", "SUPPLIER")
+                        .requestMatchers(HttpMethod.DELETE, "/listings/**").hasAnyRole("ADMIN", "SUPPLIER")
 
                         .requestMatchers("/orders/**").authenticated()
                         .requestMatchers("/users/**").authenticated()
@@ -77,7 +76,7 @@ public class SecurityConfig {
                 )
 
                 .exceptionHandling(ex -> ex
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
 
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
