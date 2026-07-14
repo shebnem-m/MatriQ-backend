@@ -71,7 +71,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/orders/**").authenticated()
                         .requestMatchers("/users/**").authenticated()
-
+                        .requestMatchers(HttpMethod.GET, "/reviews").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
 

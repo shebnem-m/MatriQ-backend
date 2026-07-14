@@ -44,4 +44,10 @@ public class ReviewController {
         reviewService.deleteReview(id);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/reviews")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Page<ReviewResponseDto>> getAllReviews(Pageable pageable) {
+        return ResponseEntity.ok(reviewService.getAllReviews(pageable));
+    }
+
 }
