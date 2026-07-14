@@ -27,13 +27,13 @@ public class ReviewController {
     }
 
     @PostMapping("/listings/{id}/reviews")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPPLIER', 'CUSTOMER')")
     public ResponseEntity<ReviewResponseDto> createReview(@PathVariable UUID id, @Valid @RequestBody ReviewCreateDto dto) {
         return new ResponseEntity<>(reviewService.createReview(id, dto), HttpStatus.CREATED);
     }
 
     @PutMapping("/reviews/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPPLIER', 'CUSTOMER')")
     public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable UUID id, @Valid @RequestBody ReviewCreateDto dto) {
         return ResponseEntity.ok(reviewService.updateReview(id, dto));
     }
