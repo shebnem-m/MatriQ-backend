@@ -35,6 +35,10 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public Page<ReviewResponseDto> getAllReviews(Pageable pageable) {
+        return reviewRepository.findAll(pageable).map(reviewMapper::toResponseDto);
+    }
+    @Override
     public ReviewResponseDto updateReview(UUID id, ReviewCreateDto dto) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + id)); // Dəyişdirildi
