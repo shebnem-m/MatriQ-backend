@@ -118,6 +118,6 @@ Docker volumes ensure database state persistence between container restarts.
 
 ## Project Team
 - Shabnam Muradova - User Module & Deployment: [GitHub](https://github.com/shebnem-m)
-- Mohsin - Supplier Module: [GitHub](https://github.com/mohsin-github)
+- Mohsin - Supplier Module: [GitHub](https://github.com/Anar5432)
 - Yaqut Rasulbayli- Listing, Review Modules & Authorization Security: [GitHub](https://github.com/yagutrslbyl)
 - Nihad Bagirzade- Order Module & JWT Core Security: [GitHub](https://github.com/TheGlitch26)
