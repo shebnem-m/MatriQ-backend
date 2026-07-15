@@ -5,6 +5,7 @@ Spring Boot backend for MatriQ, a material sourcing platform for architects, int
 ## Project Links
 - Frontend Repository: https://github.com/shebnem-m/MatriQ-frontend
 - Live Application: https://matriq-backend-p4u3.onrender.com
+- Project Management Board: https://mini-task-manager-bay.vercel.app
 
 ## Tech Stack
 - Spring Boot
